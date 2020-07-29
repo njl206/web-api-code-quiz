@@ -3,15 +3,30 @@ let questions = [
         title: "what color is water?",
         choices: ["red", "blue", "green", "orange"],
         answer: "blue",
+    },
+
+    {
+        title: "What color is an orange?",
+        choices: ["orange", "red", "blue", "green"],
+        answer: "orange",
+    },
+
+    {
+        title: "is Pluto a planet?",
+        choices: ["yes", "no"],
+        answer: "no",
     }
+
 ]
+
 
 var timer = document.querySelector("#timer");
 var startQuizButton = document.querySelector("#startQuiz");
 var quiz = document.querySelector("#quiz");
-var scoreButton = document.querySelector("highScores");
+var scoreButton = document.querySelector("#highScores");
 var clearScoreButton = document.querySelector("#clearScores");
 var retry = document.querySelector("#retry");
+
 
 
 let secondsLeft = 30;
@@ -23,8 +38,8 @@ scoreButton.addEventListener("click", toggleScoreDisplay);
 clearScoreButton.addEventListener("click", clearScores);
 
 
-function toggleScoreDisplay(){
-    
+function toggleScoreDisplay() {
+
 }
 
 function setTime() {
@@ -49,19 +64,19 @@ function startQuiz() {
 }
 
 function displayQuestion() {
-   var questionList = questions[currentQuestion].choices.map((question)=> {
-       return `<button class="answerbutton" onclick="answerQuestion('${question}')"> ${question}</button>`;
+    var questionList = questions[currentQuestion].choices.map((question) => {
+        return `<button class="answerbutton" onclick="answerQuestion('${question}')"> ${question}</button>`;
 
-   });
-   quiz.innerHTML = `${questions[currentQuestion].title}<br>${questionList.join("")}`;
-    
+    });
+    quiz.innerHTML = `${questions[currentQuestion].title}<br>${questionList.join("")}`;
+
 };
 
-function answerQuestion (selection){
+function answerQuestion(selection) {
     if (questions[currentQuestion].answer === selection) {
         score++;
     } else {
-        secondsLeft -=10;
+        secondsLeft -= 10;
     }
     currentQuestion++;
     if (currentQuestion === questions.length) {
@@ -70,24 +85,41 @@ function answerQuestion (selection){
     displayQuestion();
 };
 
-function endGame (){
+function handleScoreSave(event) {
+    var inputVal = document.getElementById("myInput").value;
+    var personScore = {name: inputVal, score: score}
+    localStorage.setItem ("highScoreList", JSON.stringify (personScore))
+
+    console.log(inputVal);
+
+};
+
+function endGame() {
     quiz.innerHTML = `
     <p>You got ${score} of ${questions.length}</p>
-    <form onsubmit="handleScoreSave(event)">
-    <input type="text" placeholder="enter initials"></input> 
-    <input type="submit" value="save score"></input> 
-    </form>
+   
+    <input type="text" placeholder="enter initials" id="myInput"></input>
+    <button type="submit" id="scores">save score</button> 
+   
     `;
 
-    secondsLeft=0;
+    secondsLeft = 0;
     timer.innerHTML = `
     <button id="retry" onclick="restartGame()"> retry? </button> 
     `;
+
+    var saveScore = document.querySelector("#scores");
+    
+    saveScore.addEventListener("click", handleScoreSave);
 };
 
-function restartGame (){
-    secondsLeft=30;
-    currentQuestion=0;
-    score=0;
+function restartGame() {
+    secondsLeft = 30;
+    currentQuestion = 0;
+    score = 0;
     startQuiz();
 };
+
+function getScores() {
+    var highScores = JSON.parse (localStorage.getItem("highScoreList"));
+}
