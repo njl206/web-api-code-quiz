@@ -26,12 +26,18 @@ var quiz = document.querySelector("#quiz");
 var scoreButton = document.querySelector("#highScores");
 var clearScoreButton = document.querySelector("#clearScores");
 var retry = document.querySelector("#retry");
-
+var initials = document.querySelector("#initials"); 
+var lastScore = document.querySelector("#lastScore");
 
 
 let secondsLeft = 30;
 let currentQuestion = 0;
 let score = 0;
+let scoreItems = 0;
+let scoresOpen = false;
+let newScores = [];
+let highScoreArray = [];
+localStorage.setItem("highScores", JSON.stringify([]));
 
 startQuizButton.addEventListener("click", startQuiz);
 scoreButton.addEventListener("click", toggleScoreDisplay);
@@ -39,8 +45,26 @@ clearScoreButton.addEventListener("click", clearScores);
 
 
 function toggleScoreDisplay() {
-
+if (scoresOpen) {
+    highScores.classList.remove("open");
+    let scoreItems = highScores.querySelectorAll(".scoreItem");
+    scoreItems.forEach((scoreItem) => {
+        highScores.removeChild(scoreItem);
+    });
 }
+else {
+    highScores.classList.add("open");
+    let scoreList = JSON.parse(localStorage.getItem("highScores"));
+    scoreList.forEach((score) => {
+        let listItem = document.createElement("ul");
+        listItem.classList.add("scoreItem");
+        listItem.innerHTML = `<span> ${score.initial} - ${score.score} /${questions.length} </span>`;
+        highScores.appendChild(listItem);
+    });
+}
+scoresOpen = !scoresOpen;
+};
+
 
 function setTime() {
     var timerInterval = setInterval(function () {
@@ -86,11 +110,27 @@ function answerQuestion(selection) {
 };
 
 function handleScoreSave(event) {
-    var inputVal = document.getElementById("myInput").value;
-    var personScore = {name: inputVal, score: score}
-    localStorage.setItem ("highScoreList", JSON.stringify (personScore))
-
-    console.log(inputVal);
+    event.preventDefault();
+    let highScores = localStorage.getItem("highScores");
+    console.log (highScores)
+    if (highScores){
+        let newScores = JSON.parse(highScores);
+        console.log (event)
+        newScores.push({initial: event.target[0].value, score: score});
+        console.log (newScores)
+        localStorage.setItem("highScores", JSON.stringify(newScores));
+    }
+else {
+    let newScores = [];
+    newScores.push({initial: event.target[0].value, score: score});
+    console.log (newScores)
+    localStorage.setItem("highScores", JSON.stringify(newScores));
+}
+    // var inputVal = document.getElementById("myInput").value;
+    // var personScore = {name: inputVal, score: score}
+    // highScoreArray.push(personScore);
+    // console.log(highScoreArray);
+    // localStorage.setItem ("highScoreList", JSON.stringify (highScoreArray))
 
 };
 
@@ -111,6 +151,8 @@ function endGame() {
     var saveScore = document.querySelector("#scores");
     
     saveScore.addEventListener("click", handleScoreSave);
+    // getScores()
+    
 };
 
 function restartGame() {
@@ -120,6 +162,8 @@ function restartGame() {
     startQuiz();
 };
 
-function getScores() {
-    var highScores = JSON.parse (localStorage.getItem("highScoreList"));
-}
+// function getScores() {
+//     var highScores = JSON.parse (localStorage.getItem("highScoreList"));
+//     console.log(highScores) 
+//     initials.innerHTML = "hello"
+// }

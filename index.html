@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Quiz</title>
     <link rel="stylesheet" href="style.css">
-    
+
 </head>
+
 <body>
     <div>
         <button id="highScores">Scores</button>
@@ -16,23 +18,30 @@
     <div id="quiz" class="center">
         <div id="results"></div>
     </div>
+    <div class="displayHighScore">
+        <h3>
+            <span id="initials"></span>
+            <span id="lastScore"></span>
+        </h3>
+    </div>
 
-    <br><br> 
+    <br><br>
 
     <div id="timer" class="center"></div>
 
-    <div id="startQuiz" class="center" onClick = "this.style.visibility='hidden'">
+    <div id="startQuiz" class="center" onClick="this.style.visibility='hidden'">
         <button id="startButton">Start Quiz</button>
         <br><br>
         <p>
-            How to play this game: 
+            How to play this game:
             <br><br>
             You will have 30 seconds to answer all of the quiz questions.
-            <br> 
-            If you answer incorrectly, you will be penalized by 10 seconds. 
+            <br>
+            If you answer incorrectly, you will be penalized by 10 seconds.
 
         </p>
-    </div> 
+    </div>
     <script src="script.js"></script>
 </body>
+
 </html>
